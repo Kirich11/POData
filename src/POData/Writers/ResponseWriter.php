@@ -71,7 +71,7 @@ class ResponseWriter
             }
         } else {
             $responsePieces = explode(';', $responseContentType);
-            $responseContentType = $responsePieces[0];
+            $responseContentType = $responsePieces;
 
             $writer = $service->getODataWriterRegistry()->getWriter(
                 $request->getResponseVersion(),
