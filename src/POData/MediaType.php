@@ -140,7 +140,7 @@ class MediaType
     {
         foreach ($this->parameters as $parameter) {
             foreach ($parameter as $key => $value) {
-                if (strcasecmp($key, 'odata') === 0 || strcasecmp($key, 'odata.metadata')) {
+                if (strcasecmp($key, 'odata') === 0 || strcasecmp($key, 'odata.metadata') === 0) {
                     return $value;
                 }
             }
