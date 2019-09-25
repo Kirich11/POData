@@ -14,7 +14,7 @@ class MimeTypes
 
     const MIME_APPLICATION_JSON_MINIMAL_META = 'application/json;odata=minimalmetadata';
 
-    const MIME_APPLICATION_JSON_MINIMAL = 'application/json;odata=minimal';
+    const MIME_APPLICATION_JSON_MINIMAL = 'application/json;odata.metadata=minimal';
 
     const MIME_APPLICATION_JSON_NO_META = 'application/json;odata=nometadata';
 

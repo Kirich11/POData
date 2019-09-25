@@ -19,7 +19,7 @@ class JsonLightMetadataLevel extends Enum
 
     const MINIMAL_META = 'odata=minimalmetadata';
 
-    const MINIMAL = 'odata=minimal';
+    const MINIMAL = 'odata.metadata=minimal';
 
     const FULL = 'odata=fullmetadata';
 }
