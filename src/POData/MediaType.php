@@ -95,7 +95,7 @@ class MediaType
                 if (array_key_exists('odata', $candidateParts)) {
                     $candidateODataValue = $candidateParts['odata'];
                 } elseif (array_key_exists('odata.metadata', $candidateParts)) {
-                    $candidateODataValue = $candidateParts['odata'];
+                    $candidateODataValue = $candidateParts['odata.metadata'];
                 }
             }
 
@@ -140,7 +140,7 @@ class MediaType
     {
         foreach ($this->parameters as $parameter) {
             foreach ($parameter as $key => $value) {
-                if (strcasecmp($key, 'odata') === 0) {
+                if (strcasecmp($key, 'odata') === 0 || strcasecmp($key, 'odata.metadata')) {
                     return $value;
                 }
             }
