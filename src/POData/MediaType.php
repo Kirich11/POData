@@ -54,7 +54,7 @@ class MediaType
      */
     public function getMimeType()
     {
-        return $this->type . '/' . $this->subType;
+        return $this->type.'/'.$this->subType;
     }
 
     /**
@@ -93,6 +93,8 @@ class MediaType
                 //the rest look like QSPs..kinda so we can do this
                 parse_str(implode('&', $candidateParts), $candidateParts);
                 if (array_key_exists('odata', $candidateParts)) {
+                    $candidateODataValue = $candidateParts['odata'];
+                } elseif (array_key_exists('odata.metadata', $candidateParts)) {
                     $candidateODataValue = $candidateParts['odata'];
                 }
             }
@@ -143,6 +145,7 @@ class MediaType
                 }
             }
         }
+
         return null;
     }
 
