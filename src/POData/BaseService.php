@@ -8,7 +8,6 @@ use POData\Common\HttpStatus;
 use POData\Common\InvalidOperationException;
 use POData\Common\Messages;
 use POData\Common\MimeTypes;
-use POData\Common\NotImplementedException;
 use POData\Common\ODataConstants;
 use POData\Common\ODataException;
 use POData\Common\ReflectionHandler;
@@ -276,7 +275,7 @@ abstract class BaseService implements IRequestHandler, IService
         $batchProcessor->handleBatch();
         $response = $batchProcessor->getResponse();
         $this->getHost()->setResponseStatusCode(HttpStatus::CODE_ACCEPTED);
-        $this->getHost()->setResponseContentType('multipart/mixed; boundary=' . $batchProcessor->getBoundary());
+        $this->getHost()->setResponseContentType('multipart/mixed; boundary='.$batchProcessor->getBoundary());
         // Hack: this needs to be sorted out in the future as we hookup other versions.
         $this->getHost()->setResponseVersion('3.0;');
         $this->getHost()->setResponseCacheControl(ODataConstants::HTTPRESPONSE_HEADER_CACHECONTROL_NOCACHE);
@@ -373,6 +372,7 @@ abstract class BaseService implements IRequestHandler, IService
             $registry->register(new JsonLightODataWriter(JsonLightMetadataLevel::NONE(), $serviceURI));
             $registry->register(new JsonLightODataWriter(JsonLightMetadataLevel::MINIMAL(), $serviceURI));
             $registry->register(new JsonLightODataWriter(JsonLightMetadataLevel::FULL(), $serviceURI));
+            $registry->register(new JsonLightODataWriter(JsonLightMetadataLevel::MINIMAL_META(), $serviceURI));
         }
     }
 
@@ -582,6 +582,7 @@ abstract class BaseService implements IRequestHandler, IService
             MimeTypes::MIME_APPLICATION_JSON_FULL_META,
             MimeTypes::MIME_APPLICATION_JSON_NO_META,
             MimeTypes::MIME_APPLICATION_JSON_MINIMAL_META,
+            MimeTypes::MIME_APPLICATION_JSON_MINIMAL,
             MimeTypes::MIME_APPLICATION_JSON_VERBOSE, ];
 
         // The Accept request-header field specifies media types which are acceptable for the response
@@ -723,8 +724,9 @@ abstract class BaseService implements IRequestHandler, IService
      * @param bool         $needToSerializeResponse
      *
      * @throws ODataException
-     * @return string|null    The ETag for the entry object if it has eTag properties
-     *                        NULL otherwise
+     *
+     * @return string|null The ETag for the entry object if it has eTag properties
+     *                     NULL otherwise
      */
     protected function compareETag(
         &$entryObject,
@@ -779,7 +781,7 @@ abstract class BaseService implements IRequestHandler, IService
             // but that is causing an issue in Linux env where the
             // firefox browser is unable to parse the ETag in this case.
             // Need to follow up PHP core devs for this.
-            $eTag = ODataConstants::HTTP_WEAK_ETAG_PREFIX . $eTag . '"';
+            $eTag = ODataConstants::HTTP_WEAK_ETAG_PREFIX.$eTag.'"';
             if (null !== $ifMatch) {
                 if (0 != strcmp($eTag, $ifMatch)) {
                     // Requested If-Match value does not match with current
@@ -802,7 +804,7 @@ abstract class BaseService implements IRequestHandler, IService
             // but that is causing an issue in Linux env where the
             // firefox browser is unable to parse the ETag in this case.
             // Need to follow up PHP core devs for this.
-            $eTag = ODataConstants::HTTP_WEAK_ETAG_PREFIX . $eTag . '"';
+            $eTag = ODataConstants::HTTP_WEAK_ETAG_PREFIX.$eTag.'"';
         }
 
         return $eTag;
@@ -818,9 +820,10 @@ abstract class BaseService implements IRequestHandler, IService
      * @param ResourceType &$resourceType Resource type of the $entryObject
      *
      * @throws ODataException
-     * @return string|null    ETag value for the given resource (with values encoded
-     *                        for use in a URI) there are etag properties, NULL if
-     *                        there is no etag property
+     *
+     * @return string|null ETag value for the given resource (with values encoded
+     *                     for use in a URI) there are etag properties, NULL if
+     *                     there is no etag property
      */
     protected function getETagForEntry(&$entryObject, ResourceType &$resourceType)
     {
@@ -843,8 +846,8 @@ abstract class BaseService implements IRequestHandler, IService
                 );
             }
 
-            $eTagBase = $eTag . $comma;
-            $eTag = $eTagBase . ((null == $value) ? 'null' : $type->convertToOData($value));
+            $eTagBase = $eTag.$comma;
+            $eTag = $eTagBase.((null == $value) ? 'null' : $type->convertToOData($value));
 
             $comma = ',';
         }
@@ -857,6 +860,7 @@ abstract class BaseService implements IRequestHandler, IService
 
             return rtrim($eTag, ',');
         }
+
         return null;
     }
 }
