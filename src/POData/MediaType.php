@@ -94,8 +94,8 @@ class MediaType
                 parse_str(implode('&', $candidateParts), $candidateParts);
                 if (array_key_exists('odata', $candidateParts)) {
                     $candidateODataValue = $candidateParts['odata'];
-                } elseif (array_key_exists('odata.metadata', $candidateParts)) {
-                    $candidateODataValue = $candidateParts['odata.metadata'];
+                } elseif (array_key_exists('odata_metadata', $candidateParts)) {
+                    $candidateODataValue = $candidateParts['odata_metadata'];
                 }
             }
 
