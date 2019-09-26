@@ -142,9 +142,9 @@ class JsonWriter
                 break;
 
             case 'Edm.DateTime':
-                $dateTime = new Carbon($value, new \DateTimeZone('UTC'));
-                $formattedDateTime = $dateTime->format('U')*1000;
-                $this->writeCore('/Date(' . $formattedDateTime . ')/', /* quotes */ true);
+                // $dateTime = new Carbon($value, new \DateTimeZone('UTC'));
+                // $formattedDateTime = $dateTime->format('U')*1000;
+                $this->writeCore($value, /* quotes */ true);
                 break;
 
             case 'Edm.String':
